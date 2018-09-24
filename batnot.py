@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import time
 import os
@@ -20,6 +21,10 @@ def main():
     hasAlerted3 = False
     hasAlertedFull = False
 
+    def notifyWarning(level):
+        os.system('/usr/bin/notify-send "Warning: battery at %i%%"' % (warning_threshold1 * 100))
+
+    notifyWarning(0.5)
     charging = False
     new = 0
     while True:
@@ -28,9 +33,16 @@ def main():
         fh.close()
 
         fh = open("/sys/class/power_supply/BAT0/status", 'r')
-        status = fh.read()
-        charging = (status == 'Charging\n') or (status == 'Full\n')
+        status = fh.read().strip()
+        charging = (status == 'Charging') or (status == 'Full')
         fh.close()
+
+        if status == 'Full' and not hasAlertedFull:
+            hasAlertedFull = True
+            os.system('/usr/bin/notify-send "Battery fully charged"')
+
+        if not charging:
+            hasAlertedFull = False
 
         power = new / full
         # os.system('/usr/bin/notify-send "Power: %s"' % str(power))
@@ -38,17 +50,20 @@ def main():
         if power < warning_threshold1 and not hasAlerted1 and not charging:
             # print("Warning: Power below 30%")
             # os.system('wall "Warning: battery power at %d\%"' % (int(warning_threshold1 * 100)))
-            os.system('/usr/bin/notify-send "Warning: battery at %f"' % warning_threshold1)
+            # os.system('/usr/bin/notify-send "Warning: battery at %f"' % warning_threshold1)
+            notifyWarning(warning_threshold1)
             hasAlerted1 = True
         elif power < warning_threshold2 and not hasAlerted2 and not charging:
             # print("Warning: Power below 30%")
             # os.system('wall "Warning: battery power at %d\%"' % (int(warning_threshold2 * 100)))
-            os.system('/usr/bin/notify-send "Warning: battery power low 2"')
+            # os.system('/usr/bin/notify-send "Warning: battery power low 2"')
+            notifyWarning(warning_threshold2)
             hasAlerted2 = True
         elif power < warning_threshold3 and not hasAlerted3 and not charging:
             # print("Warning: Power below 30%")
             # os.system('wall "Warning: battery power at %d\%"' % (int(warning_threshold3 * 100)))
-            os.system('/usr/bin/notify-send "Warning: battery power low 3"')
+            # os.system('/usr/bin/notify-send "Warning: battery power low 3"')
+            notifyWarning(warning_threshold3)
             hasAlerted3 = True
         elif charging:
             hasAlerted1 = False

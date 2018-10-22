@@ -1,12 +1,13 @@
 # i3wm battery notifications
-Notifications for low battery power in i3 window manager on Ubuntu.
+Notifications for low battery power in i3 window manager on Ubuntu. Possibly on other distros as well.
 
-# Usage
-Add the below line to the i3 config file.
+## Usage
 
-`exec --no-startup-id [PATH TO FILE]/batnot.py`
+To simply install the program to your PATH run:
+`make install`
 
-In the top of the python file you can change the threshold for warnings, defaults are 20%, 10% and 5%.
+To install it and add its launch to your i3 config file run:
+`make add` (Recommended)
 
 If you'd rather have it be the percentage of the actual battery capacity, change the line
 
@@ -15,3 +16,6 @@ If you'd rather have it be the percentage of the actual battery capacity, change
 to
 
 `fh = open("/sys/class/power_supply/BAT0/charge_full", 'r')`
+
+## Notice
+This program assumes that your battery is named BAT0. If this is not the case, then correct it in the code. I haven't gotten around to making an automatic recognition yet.

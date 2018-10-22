@@ -4,7 +4,7 @@ import time
 import os
 
 
-os.system('/usr/bin/notify-send "Batnot started."')
+os.system('/usr/bin/notify-send "i3-battery-notification started."')
 
 
 def main():

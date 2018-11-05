@@ -19,3 +19,6 @@ to
 
 ## Notice
 This program assumes that your battery is named BAT0. If this is not the case, then correct it in the code. I haven't gotten around to making an automatic recognition yet.
+
+## Requirements
+Python 3.x

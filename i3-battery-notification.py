@@ -4,7 +4,7 @@ import time
 import os
 
 
-os.system('/usr/bin/notify-send "i3-battery-notification started"')
+# os.system('/usr/bin/notify-send "i3-battery-notification started"')
 
 
 def main():
@@ -20,6 +20,7 @@ def main():
     hasAlerted2 = False
     hasAlerted3 = False
     hasAlertedFull = False
+    hasAlertedCharging = False
 
     def notifyWarning(level):
         os.system('/usr/bin/notify-send "Warning: battery below %i%%"' % (level * 100))
@@ -36,12 +37,17 @@ def main():
         charging = (status == 'Charging') or (status == 'Full')
         fh.close()
 
+        if charging and not hasAlertedCharging:
+            hasAlertedCharging = True
+            os.system('/usr/bin/notify-send "Battery now charging"')
+
         if status == 'Full' and not hasAlertedFull:
             hasAlertedFull = True
             os.system('/usr/bin/notify-send "Battery fully charged"')
 
         if not charging:
             hasAlertedFull = False
+            hasAlertedCharging = False
 
         power = new / full
         # os.system('/usr/bin/notify-send "Power: %s"' % str(power))
